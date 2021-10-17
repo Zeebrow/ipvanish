@@ -5,8 +5,9 @@ use Switch;
 use Cwd;
 use Getopt::Std;
 use Data::Dumper;
-use Ipvanish::Server;
-use Ipvanish::City;
+
+use Ipvanish::Utils::Server;
+use Ipvanish::Utils::City;
 
 my @configs = ();
 my @countries = (); 
@@ -36,6 +37,7 @@ sub parse_configs{
     push(@countries, $+{country});
     push(@{$country_cities{$+{city_short}}}, $+{city});
     push(@{$city_servers{$+{city}}}, $+{server_id});
+
     if( grep( /$+{city_short}/, @cities_found ) ){
       $cities{$+{city_short}}->add_server($+{server_id});
     } else {
@@ -47,6 +49,7 @@ sub parse_configs{
           });
       $cities{$+{city_short}}->add_server($+{server_id});
     }
+
     push(@servers, Server->new({
           filepath => $_,
           name => $+{server_id},
@@ -58,6 +61,8 @@ sub parse_configs{
 
   @countries = uniq(\@countries);
 }
+
+
 
 sub print_city_servers {
   my $city_short = shift @_;
