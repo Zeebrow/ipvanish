@@ -65,6 +65,7 @@ sub parse_configs{
 
 
 sub print_city_servers {
+  die "Specify a city to get servers.\n" if( scalar @_ < 1);
   my $city_short = shift @_;
   #print Dumper $cities{'atl'};
   if( not exists( $cities{$city_short} ) ){
@@ -89,7 +90,10 @@ sub uniq {
   }
   @$ctrys = reverse( sort ( keys ( %seen)));
 }
-
+sub activate{
+print "blahblah";
+# sudo openvpn --config configs/ipvanish-US-Atlanta-atl-a01.ovpn --ca configs/ca.ipvanish.com.crt --user zeebrow
+}
 sub get_all_country_abbv{
   print "Country codes: @countries\n";
 }
