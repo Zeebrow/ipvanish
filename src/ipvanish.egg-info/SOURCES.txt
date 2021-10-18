@@ -1,0 +1,5 @@
+setup.py
+src/ipvanish.egg-info/PKG-INFO
+src/ipvanish.egg-info/SOURCES.txt
+src/ipvanish.egg-info/dependency_links.txt
+src/ipvanish.egg-info/top_level.txt
