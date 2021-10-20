@@ -11,5 +11,8 @@ install -vd "$configs_dir"
 cd "$configs_dir"
 wget https://www.ipvanish.com/software/configs/configs.zip
 unzip configs.zip
+pwd
+ls | wc -l
+rm configs.zip
 sudo chown -R 0700 "$configs_dir"
 
