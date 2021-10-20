@@ -1,7 +1,8 @@
 #!/bin/bash
 set -x
+PROG_NAME=ipvanish
 [ -z $XDG_CONFIG_HOME ] && echo 'error: $XDG_CONFIG_HOME is not set!' && exit 1
-configs_dir="${XDG_CONFIG_HOME:-$HOME/.config}/ipvanish-cli"
+configs_dir="${XDG_CONFIG_HOME:-$HOME/.config}/$PROG_NAME"
 
 
 sudo apt-get install -y openvpn network-manager-openvpn network-manager-openvpn-gnome
