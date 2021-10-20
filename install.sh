@@ -10,6 +10,6 @@ sudo apt-get install -y openvpn network-manager-openvpn network-manager-openvpn-
 install -vd "$configs_dir"
 cd "$configs_dir"
 wget https://www.ipvanish.com/software/configs/configs.zip
-sudo chown -R 0600 "$configs_dir"
 unzip configs.zip
+sudo chown -R 0600 "$configs_dir"
 
