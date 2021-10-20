@@ -2,12 +2,13 @@ from pathlib  import Path
 import os
 import getpass
 
+PROG_NAME = "ipvanish"
 def get_ovpn_config_dir():
     if os.getenv("XDG_CONFIG_HOME"):
-        ovpn_config_dir = Path(os.getenv("XDG_CONFIG_HOME")) / "ipvanish/configs"
+        ovpn_config_dir = Path(os.getenv("XDG_CONFIG_HOME")) / f"{PROG_NAME}/configs"
     else:
         try:
-            ovpn_config_dir = Path(os.path.expanduser("~")) / ".config/ipvanish/configs"
+            ovpn_config_dir = Path(os.path.expanduser("~")) / f".config/{PROG_NAME}/configs"
             os.stat(ovpn_config_dir)
         except:
             print(f"No configs file found at '{ovpn_config_dir}'")
