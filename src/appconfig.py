@@ -4,7 +4,9 @@ import getpass
 
 PROG_NAME = "ipvanish"
 def get_ovpn_config_dir():
-    if os.getenv("XDG_CONFIG_HOME"):
+    if os.getenv("IPVANISH_CONFIGS_DIR"):
+        ovpn_config_dir = os.getenv("IPVANISH_CONFIGS_DIR")
+    elif os.getenv("XDG_CONFIG_HOME"):
         ovpn_config_dir = Path(os.getenv("XDG_CONFIG_HOME")) / f"{PROG_NAME}/configs"
     else:
         try:
