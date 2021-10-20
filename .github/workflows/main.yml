@@ -35,7 +35,8 @@ jobs:
         python -m pip install -e .
     - name: Run unittests
       working-directory: ./tests
-      env: IPVANISH_CONFIGS_DIR
+      env: 
+        IPVANISH_CONFIGS_DIR: empty-configfiles
       run: |
         python3 -m unittest
 
