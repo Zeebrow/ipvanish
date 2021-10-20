@@ -4,7 +4,9 @@ import os
 from pathlib import Path
 import re
 
-def parse_config(config_fp: str):
+from appconfig import get_ovpn_config_dir
+
+def parse_config(config_fp=get_ovpn_config_dir()):
     configs = []
     _l = os.listdir(config_fp)
     for x in _l:
@@ -34,7 +36,7 @@ class Config:
         r = re.compile(cfgrex).match(ipv_fname)
         return r.groupdict()
 
-def get_city_servers(city_short, cfgdir='configs'):
+def get_city_servers(city_short, cfgdir=get_ovpn_config_dir()):
     cfgs = os.listdir(Path(cfgdir))
     servers = []
     for cfg in cfgs:
@@ -47,7 +49,7 @@ def get_city_servers(city_short, cfgdir='configs'):
     return servers
     
 
-def get_countries(cfgdir='configs'):
+def get_countries(cfgdir=get_ovpn_config_dir()):
     cfgs = os.listdir(Path(cfgdir))
     countries = []
     for c in cfgs:
@@ -57,7 +59,7 @@ def get_countries(cfgdir='configs'):
             pass
     return set(countries)
 
-def get_country_cities(country, cfgdir='configs'):
+def get_country_cities(country, cfgdir=get_ovpn_config_dir()):
     cfgs = os.listdir(Path(cfgdir))
     ccs = []
     for c in cfgs:
@@ -69,3 +71,8 @@ def get_country_cities(country, cfgdir='configs'):
     return set(ccs)
 
 
+if __name__ == "__main__":
+    cfgs = get_ovpn_config_dir()
+    print(cfgs)
+    print(len(os.listdir(cfgs)))
+    print(get_countries())

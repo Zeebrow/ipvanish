@@ -1,13 +1,15 @@
 import unittest
 from ipvanish import get_countries, get_country_cities, get_city_servers
+from pathlib import Path
+import os
 
 class TestConfigFunctions(unittest.TestCase):
 
     def setUp(self):
-        self.cfgdir = './configs'
+        self.cfgdir = Path(os.path.dirname(__file__))
 
     def test_returns_thismany(self):
-        self.assertEqual(len(get_countries(self.cfgdir)), 52)
+        self.assertEqual(len(get_countries()), 52)
 
     def test_get_country_cities_returns_amt(self):
         self.assertEqual( len(get_country_cities('CH')), 1)
