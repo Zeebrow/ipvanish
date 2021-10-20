@@ -5,8 +5,8 @@ import os
 
 class TestConfigFunctions(unittest.TestCase):
 
-    def setUp(self):
-        os.environ["IPVANISH_CONFIG_DIR"] = str(Path(os.getcwd() + os.path.dirname(__file__)) / "empty-configfiles" )
+#    def setUp(self):
+#        os.environ["IPVANISH_CONFIG_DIR"] = str(Path(os.getcwd() + os.path.dirname(__file__)) / "empty-configfiles" )
 #        self.cfgdir = Path(os.path.dirname(__file__))
 
     def test_returns_thismany(self):
