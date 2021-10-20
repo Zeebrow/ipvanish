@@ -17,5 +17,5 @@ ls | grep syd
 ls | grep syd | wc -l
 ##
 rm configs.zip
-sudo chown 0700 "$configs_dir/*"
+sudo chown -R 0700 "$configs_dir"
 
