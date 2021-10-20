@@ -5,8 +5,8 @@ import os
 
 class TestConfigFunctions(unittest.TestCase):
 
-    def setUp(self):
-        self.cfgdir = Path(os.path.dirname(__file__))
+#    def setUp(self):
+#        self.cfgdir = Path(os.path.dirname(__file__))
 
     def test_returns_thismany(self):
         self.assertEqual(len(get_countries()), 52)
