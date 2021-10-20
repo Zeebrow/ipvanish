@@ -28,6 +28,7 @@ jobs:
 #        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: install ipvanish for unittests
       run: |
+        ./install.sh
         python -m pip install -e .
     - name: Run unittests
       working-directory: ./tests
