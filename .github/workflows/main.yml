@@ -34,7 +34,6 @@ jobs:
         ./install.sh
     - name: install ipvanish 
       run: |
-        ./install.sh
         python -m pip install -e .
     - name: Run unittests
       working-directory: ./tests
