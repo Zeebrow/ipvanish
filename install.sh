@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+set -ex
 PROG_NAME=ipvanish
 [ -z $XDG_CONFIG_HOME ] && echo 'error: $XDG_CONFIG_HOME is not set!' && exit 1
 configs_dir="${XDG_CONFIG_HOME:-$HOME/.config}/$PROG_NAME/configs"
