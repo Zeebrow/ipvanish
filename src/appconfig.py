@@ -28,6 +28,10 @@ def get_ovpn_config_dir(default_configs_dir=DEFAULT_CONFIGS_DIR):
     return ovpn_config_dir
 
 def get_configs(cfg_dir=get_ovpn_config_dir()) -> list:
+    """
+    return a list of all valid config files
+    cfg_dir: path to directory containing config files
+    """
     configs = []
     for x in os.listdir(cfg_dir):
         if os.path.splitext(x)[1] == '.ovpn':

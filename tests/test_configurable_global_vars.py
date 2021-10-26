@@ -4,6 +4,7 @@ import os
 import tempfile
 from pathlib import Path
 from ipvanish import get_ovpn_config_dir, get_configs
+import random
 
 cwd = Path(os.path.dirname(__file__))
 config_testdata = str(cwd / "empty_confgfiles")
@@ -27,6 +28,23 @@ def test_IPVANISH_CONFIG_DIR_overrides_XDG():
 
 def test_cli_arg_overrides_IPVANISH_CONFIG_DIR():
     pass
+
+# TODO: change name of func from get_configs() to list_configs()
+def test_list_configs_is_configurable():
+    monkeypatch = MonkeyPatch()
+    with monkeypatch.context() as m:
+        tdir = tempfile.TemporaryDirectory()
+        num_files = random.randint(5,10)
+        for f in range(num_files):
+            tempfile.mkstemp(suffix='.ovpn', dir=tdir.name)
+            
+        print(f"{tdir.name}")
+        print(os.stat(tdir.name))
+        m.setenv("IPVANISH_CONFIG_DIR", tdir.name)
+        cfg_list = get_configs(tdir.name)
+    assert len(cfg_list) == num_files
+    #tdir.cleanup()
+
 
 def test_get_configs():
     monkeypatch = MonkeyPatch()
