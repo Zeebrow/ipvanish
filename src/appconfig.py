@@ -3,17 +3,48 @@ import os
 import getpass
 
 PROG_NAME = "ipvanish"
-def get_ovpn_config_dir():
-    if os.getenv("IPVANISH_CONFIGS_DIR"):
-        ovpn_config_dir = os.getenv("IPVANISH_CONFIGS_DIR")
+DEFAULT_CONFIGS_DIR = str(Path(os.path.expanduser("~")) / f".config/{PROG_NAME}/configs")
+CA_CERTFILE = lambda cfgdir: str(Path(cfgdir)/"ca.ipvanish.com.crt")
+
+def get_ovpn_config_dir(default_configs_dir=DEFAULT_CONFIGS_DIR):
+    """
+    default_configs_dir: str
+    env vars should (must?) be absolute paths
+    """
+    if os.getenv("IPVANISH_CONFIG_DIR"):
+        print("got ipv_configs_dir")
+        ovpn_config_dir = str( Path(os.getenv("IPVANISH_CONFIG_DIR")) )
     elif os.getenv("XDG_CONFIG_HOME"):
-        ovpn_config_dir = Path(os.getenv("XDG_CONFIG_HOME")) / f"{PROG_NAME}/configs"
+        ovpn_config_dir = str( Path(os.getenv("XDG_CONFIG_HOME")) / f"{PROG_NAME}/configs" )
     else:
         try:
-            ovpn_config_dir = Path(os.path.expanduser("~")) / f".config/{PROG_NAME}/configs"
+            ovpn_config_dir = str( Path( default_configs_dir ) ) 
+            print(f"got default: {ovpn_config_dir}")
             os.stat(ovpn_config_dir)
-        except:
-            print(f"No configs file found at '{ovpn_config_dir}'")
+        except Exception as e:
+            print(e)
+            print(f"No such directory '{str(ovpn_config_dir)}'")
 
     return ovpn_config_dir
 
+def get_configs(cfg_dir=get_ovpn_config_dir()) -> list:
+    configs = []
+    for x in os.listdir(cfg_dir):
+        if os.path.splitext(x)[1] == '.ovpn':
+            configs.append(x)
+    return configs
+
+class InvalidConfiguration(Exception):
+    """Raise when no configuration files can be loaded"""
+    pass
+
+def ovpn_config_dir_is_invalid(ovpn_config_dir):
+    try:
+        os.stat(ovpn_config_dir)
+        os.stat(CA_CERTFILE(ovpn_config_dir))
+        return False
+    except FileNotFoundError as e:
+        return e
+
+if __name__ == '__main__':
+    print(get_ovpn_config_dir())

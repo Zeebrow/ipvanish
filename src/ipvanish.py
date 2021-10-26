@@ -4,15 +4,7 @@ import os
 from pathlib import Path
 import re
 
-from appconfig import get_ovpn_config_dir
-
-def parse_config(config_fp=get_ovpn_config_dir()):
-    configs = []
-    _l = os.listdir(config_fp)
-    for x in _l:
-        if os.path.splitext(x)[1] == '.ovpn':
-            configs.append(x)
-    return configs
+from appconfig import get_ovpn_config_dir, get_configs
 
 class Config:
     def __init__(self, fpath):
@@ -32,7 +24,7 @@ class Config:
         city_short
         server
         """
-        cfgrex = '^(?:ipvanish-)(?P<country>[A-Z]{2})-(?P<city>.*)-(?P<city_short>[a-z]{3})-(?P<server>[a-z][0-9]{2})(?:\.ovpn)$'
+        cfgrex = r'^(?:ipvanish-)(?P<country>[A-Z]{2})-(?P<city>.*)-(?P<city_short>[a-z]{3})-(?P<server>[a-z][0-9]{2})(?:\.ovpn)$'
         r = re.compile(cfgrex).match(ipv_fname)
         return r.groupdict()
 
