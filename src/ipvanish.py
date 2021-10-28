@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 import re
 
-from appconfig import get_ovpn_config_dir, get_configs
+from appconfig import get_ovpn_config_dir, list_configs
 
 class Config:
     def __init__(self, fpath):

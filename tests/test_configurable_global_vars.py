@@ -3,7 +3,7 @@ from pytest import MonkeyPatch
 import os
 import tempfile
 from pathlib import Path
-from ipvanish import get_ovpn_config_dir, get_configs
+from ipvanish import get_ovpn_config_dir, list_configs
 import random
 
 cwd = Path(os.path.dirname(__file__))
@@ -31,13 +31,13 @@ def fixture_config_dirs(tmp_path, range_lo=5, range_hi=10):
     
     return (tdir, num_files)
 
-# TODO: change name of func from get_configs() to list_configs()
+# TODO: change name of func from list_configs() to list_configs()
 def test_list_configs_is_configurable(fixture_config_dirs):
     cfg_dir, ovpn_fcount = fixture_config_dirs
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
         m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
-        cfg_list = get_configs(cfg_dir)
+        cfg_list = list_configs(cfg_dir)
         assert len(cfg_list) == ovpn_fcount
 
 def test_default_config_dir_is_user_dotconfig(fixture_config_dirs):
@@ -59,11 +59,11 @@ def test_IPVANISH_CONFIG_DIR_overrides_XDG():
 def test_cli_arg_overrides_IPVANISH_CONFIG_DIR():
     pass
 
-def test_get_configs():
+def test_list_configs():
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
         m.setenv("IPVANISH_CONFIG_DIR", config_testdata)
-        cfg_list = get_configs()
+        cfg_list = list_configs()
     assert len(cfg_list) == 1962
         
 if __name__ == '__main__':
