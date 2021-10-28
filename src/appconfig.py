@@ -12,14 +12,12 @@ def get_ovpn_config_dir(default_configs_dir=DEFAULT_CONFIGS_DIR):
     env vars should (must?) be absolute paths
     """
     if os.getenv("IPVANISH_CONFIG_DIR"):
-        print("got ipv_configs_dir")
         ovpn_config_dir = str( Path(os.getenv("IPVANISH_CONFIG_DIR")) )
     elif os.getenv("XDG_CONFIG_HOME"):
         ovpn_config_dir = str( Path(os.getenv("XDG_CONFIG_HOME")) / f"{PROG_NAME}/configs" )
     else:
         try:
             ovpn_config_dir = str( Path( default_configs_dir ) ) 
-            print(f"got default: {ovpn_config_dir}")
             os.stat(ovpn_config_dir)
         except Exception as e:
             print(e)
@@ -27,11 +25,15 @@ def get_ovpn_config_dir(default_configs_dir=DEFAULT_CONFIGS_DIR):
 
     return ovpn_config_dir
 
+def _sanitize_path(p):
+    return str(Path(p))
+
 def get_configs(cfg_dir=get_ovpn_config_dir()) -> list:
     """
     return a list of all valid config files
     cfg_dir: path to directory containing config files
     """
+    cfg_dir = _sanitize_path(cfg_dir) 
     configs = []
     for x in os.listdir(cfg_dir):
         if os.path.splitext(x)[1] == '.ovpn':
