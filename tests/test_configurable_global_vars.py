@@ -5,31 +5,12 @@ import tempfile
 from pathlib import Path
 from ipvanish import get_ovpn_config_dir, list_configs
 import random
+from fixtures.fixt_cfg_dir import fixture_config_dirs
 
 cwd = Path(os.path.dirname(__file__))
 config_testdata = str(cwd / "empty_confgfiles")
 #default_config_dir = str(Path( os.path.expanduser('~')) / ".config/ipvanish/configs")
 default_xdg_config_home =  str(Path( os.path.expanduser('~')) / ".config")
-
-@pytest.fixture
-def fixture_config_dirs(tmp_path, range_lo=5, range_hi=10):
-    """
-    returns a tuple of the path to a temporary directory and the randomly
-    generated number of empty .ovpn files inside.
-    """
-    #tdir = tempfile.TemporaryDirectory()
-    tdir = tmp_path / "configs"
-    tdir.mkdir()
-    num_files = random.randint(range_lo,range_hi)
-    for f in range(num_files):
-        f1 = tdir / f"file{f}.ovpn"
-        f1.touch()
-    # make some other files too
-    for i in range(random.randint(1,3)):
-        randofile = tdir/f"rando{i}"
-        randofile.touch()
-    
-    return (tdir, num_files)
 
 # TODO: change name of func from list_configs() to list_configs()
 def test_list_configs_is_configurable(fixture_config_dirs):
