@@ -9,10 +9,11 @@ import logging
 from pathlib import Path
 from requests import get
 
-from ipvanish import get_ovpn_config_dir
+from .utils import get_ovpn_config_dir
+
+#from ipvanish import get_ovpn_config_dir
 
 logger = logging.getLogger(__name__)
-
 
 def update_configs(cfg_dir=get_ovpn_config_dir()):
     # backup existing config
