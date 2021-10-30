@@ -1,0 +1,43 @@
+vactivate
+PYTESTS_DIR="$(dirname $BASH_SOURCE)/tests"
+
+unset -f t
+function t () {
+  if [ "$#" -eq 0 ]; then
+    python3 -m unittest discover "$PYTESTS_DIR"
+  else
+    cwd=$(pwd)
+    cd "$PYTESTS_DIR"
+    python3 -m unittest "$@"
+    cd "$cwd"
+  fi
+}
+export -f t
+
+
+nocomplete=()
+_complete_t () {
+	# $1 = name of command to be completed
+	# $2 = word being completed
+	# $3 = "word preceding the word being completed"
+	## so $3 = $1 when completing the command's first arg
+	
+	# Stop requesting completions if there is anything already completed
+	[ "${#COMP_WORDS[@]}" -gt 2 ] && return
+
+	myscripts=()
+	#for s in `find "$HOME/.local/bin/scripts" -maxdepth 1 -type f -executable`; do
+	for test_ in `ls "$PYTESTS_DIR" | grep test_`; do
+    myscripts+=(${test_##*/})
+	done
+	COMPREPLY=($(compgen -W "${myscripts[*]}" "${COMP_WORDS[1]}"))
+	
+	_deboog(){
+		# on single <tab>
+		echo "$1 ------ $2 ---------- $3"
+		echo "${myscripts[*]}"
+		echo "NOCOMPLETE $nocomplete"
+	}
+}
+
+complete -X "$nocomplete" -F _complete_t t
