@@ -1,5 +1,15 @@
 setup.py
+src/ipvanish/__init__.py
+src/ipvanish/appconfig.py
+src/ipvanish/ipvanish-cli.py
+src/ipvanish/parse_config.py
+src/ipvanish/processes.py
+src/ipvanish/utils.py
 src/ipvanish.egg-info/PKG-INFO
 src/ipvanish.egg-info/SOURCES.txt
 src/ipvanish.egg-info/dependency_links.txt
+src/ipvanish.egg-info/entry_points.txt
+src/ipvanish.egg-info/requires.txt
 src/ipvanish.egg-info/top_level.txt
+src/scripts/__init__.py
+src/scripts/ipvanish.py
