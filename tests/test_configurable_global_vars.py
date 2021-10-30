@@ -1,7 +1,6 @@
 import pytest
 from pytest import MonkeyPatch
-import os
-import tempfile
+from os.path import expanduser
 from pathlib import Path
 from ipvanish import get_ovpn_config_dir, list_configs
 import random
@@ -29,7 +28,7 @@ def test_default_config_dir_is_user_dotconfig(fixture_config_dirs):
         assert get_ovpn_config_dir(str(cfg_dir)) == str(cfg_dir)
 
 def test_IPVANISH_CONFIG_DIR_overrides_XDG(fixture_config_dirs):
-    default_xdg_config_home =  str(Path( os.path.expanduser('~')) / ".config")
+    default_xdg_config_home =  str(Path( expanduser('~')) / ".config")
     cfg_dir, _ = fixture_config_dirs
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
