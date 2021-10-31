@@ -1,5 +1,11 @@
 import unittest
 from ipvanish import Config
+from fixtures.fixt_cfg_dir import fixture_config_dirs
+
+# TODO
+def test_Config_repr(fixture_config_dirs):
+    cfg_dir=fixture_config_dirs
+    pass
 
 class TestFilenameParsing(unittest.TestCase):
 
@@ -15,7 +21,7 @@ class TestFilenameParsing(unittest.TestCase):
         self.assertEqual(gc1.city, "Seattle")
         self.assertEqual(gc1.city_short, "sea")
         self.assertEqual(gc1.server, "a30")
-        # careful to catch dashes
+        # catch dashes
         self.assertEqual(gc2.country, "US")
         self.assertEqual(gc2.city, "San-Jose")
         self.assertEqual(gc2.city_short, "sjc")

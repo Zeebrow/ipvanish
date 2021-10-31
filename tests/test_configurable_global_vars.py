@@ -2,7 +2,7 @@ import pytest
 from pytest import MonkeyPatch
 from os.path import expanduser
 from pathlib import Path
-from ipvanish import get_ovpn_config_dir, list_configs
+from ipvanish import get_ovpn_config_dir, list_configs, city_abv_pair
 import random
 from fixtures.fixt_cfg_dir import fixture_config_dirs
 
@@ -39,6 +39,14 @@ def test_IPVANISH_CONFIG_DIR_overrides_XDG(fixture_config_dirs):
 
 def test_cli_arg_overrides_IPVANISH_CONFIG_DIR():
     pass
+
+def test_city_abv_pair(fixture_config_dirs):
+    cfg_dir, _ = fixture_config_dirs
+    monkeypatch = MonkeyPatch()
+    with monkeypatch.context() as m:
+        m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
+        print(city_abv_pair())
+
 
         
 if __name__ == '__main__':
