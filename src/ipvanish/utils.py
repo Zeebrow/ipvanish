@@ -6,6 +6,8 @@ PROG_NAME = "ipvanish"
 DEFAULT_CONFIGS_DIR = str(Path(os.path.expanduser("~")) / f".config/{PROG_NAME}/configs")
 CA_CERTFILE = lambda cfgdir: str(Path(cfgdir)/"ca.ipvanish.com.crt")
 
+country_emote = lambda a: chr(127397 + ord(a.upper()))
+
 def get_ovpn_config_dir(default_configs_dir=DEFAULT_CONFIGS_DIR):
     """
     default_configs_dir: str

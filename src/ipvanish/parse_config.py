@@ -7,6 +7,7 @@ import random
 from collections import defaultdict
 
 from .utils import *
+from .constants import ctry_dict
 
 class ConfigurationSet:
     """
@@ -16,6 +17,7 @@ class ConfigurationSet:
         self.cfg_dir = Path(fpath)
         self.configs = []
         self.countries = []
+        self.country_details = {}
         self.cityXcountry = defaultdict(set)
         self.abvXcountry = defaultdict(set)
         self.serverXcity = defaultdict(list)
@@ -33,8 +35,10 @@ class ConfigurationSet:
             except OSError:
                 pass
         _unordered = []
+        
         for C in self.configs:
             if C.country not in _unordered:
+                self.country_details[C.country] = ctry_dict[C.country]
                 _unordered.append(C.country)
             self.cityXcountry[C.country].add(C.city)
             self.abvXcountry[C.country].add(C.city_short)

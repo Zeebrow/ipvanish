@@ -30,31 +30,31 @@ def column_print(secho_items: list, padLen=2, padChar=' '):
     cellsPerLine = cols // cellSize
     numCells = len(secho_items)
     totalLines = 1 + (numCells //cellsPerLine )
-
-    print(f"{len(secho_items)=}")
-    print(f"{cols=}")
-    print(f"{lines=}")
-    print(f"{padLen=}")
-    print(f"{padChar=}")
-    print(f"{maxItemLen=}")
-    print(f"{cellSize=}")
-    print(f"{cellsPerLine=}")
-    print(f"{totalLines=}")
-    # sanity check
-    for k in range(cols):
-        print('*', end='')
-    print()
-    print()
-    for j in range(cellsPerLine):
-        for l in range(maxItemLen):
-            print("-", end='')
-        for p in range(padLen):
-            print(f"{'.'}", end='')
-    print()
-    print()
-    print(f"{secho_items[0]=}")
-    print(f"{len(secho_items[0]['name'])=}")
-
+    ####
+#    print(f"{len(secho_items)=}")
+#    print(f"{cols=}")
+#    print(f"{lines=}")
+#    print(f"{padLen=}")
+#    print(f"{padChar=}")
+#    print(f"{maxItemLen=}")
+#    print(f"{cellSize=}")
+#    print(f"{cellsPerLine=}")
+#    print(f"{totalLines=}")
+#    # sanity check
+#    for k in range(cols):
+#        print('*', end='')
+#    print()
+#    print()
+#    for j in range(cellsPerLine):
+#        for l in range(maxItemLen):
+#            print("-", end='')
+#        for p in range(padLen):
+#            print(f"{'.'}", end='')
+#    print()
+#    print()
+#    print(f"{secho_items[0]=}")
+#    print(f"{len(secho_items[0]['name'])=}")
+    ####
     _ct = 0
     for l in range(0, 1+totalLines):
         for c in range(1, 1+cellsPerLine):
@@ -101,12 +101,36 @@ def column_print_plainjane(items: list, padLen=2, padChar=' '):
         for i in items:
             print(i)
         return
-
     pad = padChar*padLen
     cellSize = maxItemLen + ( padLen*len(padChar) )
-    cellsPerLine = cols // cellSize
-    totalLines = 1 + (cellsPerLine // cellSize)
+    #cellsPerLine = cols // cellSize
+    #totalLines = 1 + (cellsPerLine // cellSize)
     _ct = 0
+    cellsPerLine = cols // cellSize
+    numCells = len(items)
+    totalLines = 1 + (numCells //cellsPerLine )
+    ####
+#    print(f"{cols=}")
+#    print(f"{lines=}")
+#    print(f"{padLen=}")
+#    print(f"{padChar=}")
+#    print(f"{maxItemLen=}")
+#    print(f"{cellSize=}")
+#    print(f"{cellsPerLine=}")
+#    print(f"{totalLines=}")
+#    # sanity check
+#    for k in range(cols):
+#        print('*', end='')
+#    print()
+#    print()
+#    for j in range(cellsPerLine):
+#        for l in range(maxItemLen):
+#            print("-", end='')
+#        for p in range(padLen):
+#            print(f"{'.'}", end='')
+#    print()
+#    print()
+    ####
     for l in range(0, 1+totalLines):
         for c in range(1, 1+cellsPerLine):
             #iPadLen = maxItemLen - len(items[_ct])

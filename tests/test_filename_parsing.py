@@ -1,8 +1,11 @@
 import unittest
-from ipvanish import Config
+import pytest
+from pytest import MonkeyPatch
+from pathlib import Path
+from ipvanish import Config, ConfigurationSet
 from fixtures.fixt_cfg_dir import fixture_config_dirs
 
-# TODO
+# TODO convert to pytest
 def test_Config_repr(fixture_config_dirs):
     cfg_dir=fixture_config_dirs
     pass
@@ -30,5 +33,7 @@ class TestFilenameParsing(unittest.TestCase):
     def test_city_invalid_file_ext_rasises(self):
         with self.assertRaises(OSError):
             Config(self.badname1)
+    
+    
 
 

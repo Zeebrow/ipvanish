@@ -3,7 +3,7 @@ import click
 from click import echo, style
 from collections import defaultdict
 
-from ipvanish import ConfigurationSet, get_city_servers, get_country_cities, get_countries_status, city_abv_pair
+from ipvanish import ConfigurationSet, get_city_servers, get_country_cities, get_countries_status, city_abv_pair, constants as C
 
 from .cli_helpers import column_print, column_print_plainjane, center, title_block
 
@@ -22,11 +22,14 @@ def main():
 @click.command()
 def get_ctry():
     config = ConfigurationSet()
+    clist = []
+    for c in config.countries:
+        clist.append(f"{config.country_details[c]['flag_emote']}{c} {config.country_details[c]['fullname']}")
     banner = " Available Countries "
     title_block(banner)
     print()
-    c = config.countries
-    column_print_plainjane(c)
+    #c = config.countries
+    column_print_plainjane(clist)
 
 # TODO add number of servers next to city name
 @click.command()
@@ -39,17 +42,11 @@ def get_all_cities():
     print()
     for i,c in enumerate(config.countries):
         click.echo(f"{i}) ", nl=None)
-        click.secho(f"{c} ({len(config.abvXcountry[c])}) ", fg='blue', nl=None)
-        click.secho(f"{', '.join(config.abvXcountry[c])}", fg='green')
+#        click.secho(f"{c} ({len(config.abvXcountry[c])}) ", fg='blue', nl=None)
+#        click.secho(f"{', '.join(config.abvXcountry[c])}", fg='green')
+        click.secho(f"{c} ({len(config.cityXcountry[c])}) ", fg='blue', nl=None)
+        click.secho(f"{', '.join(config.cityXcountry[c])}", fg='green')
         
-#    pairs = city_abv_pair()
-#    pairs = [x for x in sorted(pairs, key=lambda pair: pairs[0]) ]
-#    for p in pairs:
-#        #d.append({'name': f"{p[0]} ({p[1]})", 'stats': {'fg': color}})
-#        d.append({'name': f"{p[1]}", 'stats': {'fg': color}})
-#    column_print(d)
-
-
 @click.command()
 def get_status():
     banner = " Server stats "
@@ -93,6 +90,8 @@ def yo():
     
 
 main.add_command(yo, name='hi')
+main.add_command(yo, name='connect')
+main.add_command(yo, name='disconnect')
 main.add_command(get_servers, name='srv*')
 main.add_command(get_ctry, name='ctry')
 main.add_command(get_status, name='stat*')

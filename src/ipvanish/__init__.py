@@ -10,5 +10,5 @@ from .parse_config import (
         city_abv_pair
         )
 from .processes import update_configs
-from . import utils
+from . import utils, constants
 #from . import parse_config

@@ -8,6 +8,9 @@ import random
 from ipvanish import ConfigurationSet, Config, get_ovpn_config_dir
 from fixtures.fixt_cfg_dir import fixture_config_dirs
 
+# TODO there's gotta be a better way to do monkeypatching envs...
+#monkeypatch = MonkeyPatch()
+#monkeypatch.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
 def test_CS_country_list_is_sorted(fixture_config_dirs):
     cfg_dir, ovpn_fcount = fixture_config_dirs
     monkeypatch = MonkeyPatch()
@@ -26,8 +29,22 @@ def test_CS_country_list_is_sorted(fixture_config_dirs):
             assert previous < specimen
             previous = specimen
 
+def test_CS_abv_list_eq_country_list():
+    cfg_dir = Path('./select_configfiles')
+    monkeypatch = MonkeyPatch()
+    with monkeypatch.context() as m:
+        m .setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
+        config = ConfigurationSet()
+        assert len(config.cityXcountry) == len(config.abvXcountry)
 
-
+def test_CS_loads_country_details():
+    cfg_dir = Path('./select_configfiles')
+    monkeypatch = MonkeyPatch()
+    with monkeypatch.context() as m:
+        m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
+        num_countries = 52 # number of details in constants.py ctry_details dict
+        config = ConfigurationSet()
+        assert len(config.country_details.keys()) == num_countries
 
 def test_CS_loads_(fixture_config_dirs):
     cfg_dir, ovpn_fcount = fixture_config_dirs
