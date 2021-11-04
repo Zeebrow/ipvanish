@@ -16,9 +16,6 @@ from .utils import get_ovpn_config_dir
 logger = logging.getLogger(__name__)
 
 def update_configs(cfg_dir=get_ovpn_config_dir()):
-    # backup existing config
-#    cfg_dir_bkup = tempfile.TemporaryDirectory(prefix='ipvanish-', suffix='-conf.bkup' )
-#    cfg_dir_bkup = Path(cfg_dir_bkup.name )
     cfg_dir_bkup = Path(tempfile.mkdtemp(prefix='ipvanish-cfg-bkup'))
     shutil.copytree(src=cfg_dir, dst=cfg_dir_bkup / 'configs', copy_function=shutil.copy2)
     print(cfg_dir_bkup)
@@ -28,11 +25,10 @@ def update_configs(cfg_dir=get_ovpn_config_dir()):
         r = get(url)
         z = zipfile.ZipFile(io.BytesIO(r.content))
         z.extractall(cfg_dir)
-        raise FileNotFoundError("test exception")
+        raise Exception("test exception")
     except Exception as e:
         print(e)
         logger.critical(e)
-        # compress backup
         #TODO: nowzers -> datetime
         nowzers='ryenow'
         archive_filename = f'configs-bkup-{nowzers}'

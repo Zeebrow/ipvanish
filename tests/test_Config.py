@@ -6,13 +6,14 @@ from pathlib import Path
 import random
 
 from ipvanish import ConfigurationSet, Config, get_ovpn_config_dir
-from fixtures.fixt_cfg_dir import fixture_config_dirs
+#from fixtures.fixt_cfg_dir import fixture_config_dirs
+from fixtures.fixt_cfg_dir import fake_cfg_dir
 
 # TODO there's gotta be a better way to do monkeypatching envs...
 #monkeypatch = MonkeyPatch()
 #monkeypatch.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
-def test_CS_country_list_is_sorted(fixture_config_dirs):
-    cfg_dir, ovpn_fcount = fixture_config_dirs
+def test_CS_country_list_is_sorted(fake_cfg_dir):
+    cfg_dir, ovpn_fcount = fake_cfg_dir
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
         m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
@@ -46,8 +47,8 @@ def test_CS_loads_country_details():
         config = ConfigurationSet()
         assert len(config.country_details.keys()) == num_countries
 
-def test_CS_loads_(fixture_config_dirs):
-    cfg_dir, ovpn_fcount = fixture_config_dirs
+def test_CS_loads_(fake_cfg_dir):
+    cfg_dir, ovpn_fcount = fake_cfg_dir
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
         m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
@@ -55,8 +56,8 @@ def test_CS_loads_(fixture_config_dirs):
         assert len(ipv_config.configs) == ovpn_fcount
 
 # TODO need better fixture
-def test_CS_cityXcountry(fixture_config_dirs):
-    cfg_dir, ovpn_fcount = fixture_config_dirs
+def test_CS_cityXcountry(fake_cfg_dir):
+    cfg_dir, ovpn_fcount = fake_cfg_dir
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
         m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
@@ -64,8 +65,8 @@ def test_CS_cityXcountry(fixture_config_dirs):
         assert ipv_config.cityXcountry
 
 # TODO need better fixture
-def test_CS_serverXcity(fixture_config_dirs):
-    cfg_dir, ovpn_fcount = fixture_config_dirs
+def test_CS_serverXcity(fake_cfg_dir):
+    cfg_dir, ovpn_fcount = fake_cfg_dir
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
         m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
@@ -73,16 +74,16 @@ def test_CS_serverXcity(fixture_config_dirs):
         assert ipv_config.cityXcountry
 
 # TODO need better fixture
-def test_CS_serverXabv(fixture_config_dirs):
-    cfg_dir, ovpn_fcount = fixture_config_dirs
+def test_CS_serverXabv(fake_cfg_dir):
+    cfg_dir, ovpn_fcount = fake_cfg_dir
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
         m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
         ipv_config = ConfigurationSet(cfg_dir)
         assert ipv_config.serverXabv
 
-def test_CS_serverXabv_same_len_as_serverXcity(fixture_config_dirs):
-    cfg_dir, ovpn_fcount = fixture_config_dirs
+def test_CS_serverXabv_same_len_as_serverXcity(fake_cfg_dir):
+    cfg_dir, ovpn_fcount = fake_cfg_dir
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
         m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
@@ -91,8 +92,8 @@ def test_CS_serverXabv_same_len_as_serverXcity(fixture_config_dirs):
             for sxc in ipv_config.serverXcity:
                 assert len(ipv_config.serverXabv[sxa]) == len(ipv_config.serverXcity[sxc])
 
-def test_get_countries(fixture_config_dirs):
-    cfg_dir, ovpn_fcount = fixture_config_dirs
+def test_get_countries(fake_cfg_dir):
+    cfg_dir, ovpn_fcount = fake_cfg_dir
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
         m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))

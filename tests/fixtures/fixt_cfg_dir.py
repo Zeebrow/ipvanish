@@ -1,7 +1,13 @@
 import pytest
+from pytest import MonkeyPatch
 import random
 import string
 from collections import defaultdict
+
+import tempfile
+import os
+from pathlib import Path
+from ipvanish import ConfigurationSet
 
 def create_config_filename(namelen=10, **kw) -> string:
     """
@@ -42,26 +48,14 @@ def city_abv_pair(city_name_len=10) -> tuple:
 def random_server_name():
     return ascii(1,'l') + srvr_digits(2)
 
-def create_fake_config_filename(namelen=10) -> str:
-    city = city_abv_pair(city_name_len=namelen)
-    filename = f"ipvanish-{ascii(2, 'u')}-{city[0]}-{city[1]}-{ascii(1,'l') + srvr_digits(2)}.ovpn"
-    return filename
-
-@pytest.fixture
-def fixture_fake_config_filenames(count=1, namelen=10, **kwargs):
-    rtn = []
-    for i in count:
-        rtn.append(create_config_filename(namelen=namelen, **kwargs))
-    return rtn
-
-@pytest.fixture
-def fixture_config_dirs(tmp_path, range_lo=5, range_hi=10):
+#@pytest.fixture
+def fixture_config_dirs(tmp_path='', range_lo=5, range_hi=10):
     """
     returns a tuple of the path to a temporary directory and the randomly
     generated number of empty .ovpn files inside.
     """
-    #tdir = tempfile.TemporaryDirectory()
-    tdir = tmp_path / "configs"
+    tdir = Path(tempfile.TemporaryDirectory().name)
+    #tdir = tmp_path / "configs"
     tdir.mkdir()
     num_files = random.randint(range_lo,range_hi)
     for f in range(num_files):
@@ -75,29 +69,55 @@ def fixture_config_dirs(tmp_path, range_lo=5, range_hi=10):
 
     return (tdir, num_files)
 
-if __name__ == '__main__':
-    # sanity checks
-    print()
-    print(f"{ascii(2,'l')=}")
-    print(f"{ascii(2,'u')=}")
-    print(f"{ascii(10,'p')=}")
-    print()
-    print(f"{create_config_filename(namelen=15, country='US')=}")
-    print(f"{create_config_filename(country='US')=}")
-    print(f"{create_config_filename(city='Abbudabi')=}")
-    print(f"{create_config_filename(abv='adb')=}")
-    print(f"{create_config_filename(server='a01')=}")
-    print()
-    print(f"{srvr_digits(1)=}")
-    print(f"{srvr_digits(2)=}")
-    print()
-    print(f"{city_abv_pair()=}")
-    print(f"{city_abv_pair(15)=}")
-    print()
-    print(f"{random_server_name()=}")
-    print()
-    print(f"{create_config_filename()=}")
-    print(f"{create_config_filename(5)=}")
-    print(f"{create_config_filename(15)=}")
-    print(f"{create_config_filename(20)=}")
+@pytest.fixture
+def fake_cfg_dir():
+    return fixture_config_dirs()
 
+@pytest.fixture
+def patched_cs():
+    cfg_dir, ovpn_count = fixture_config_dirs()
+    print(os.listdir(cfg_dir))
+    mp = MonkeyPatch()
+    with mp.context() as mc:
+        rtn = ConfigurationSet(cfg_dir)
+        return (rtn, cfg_dir, ovpn_count)
+
+def test_patched_cs(patched_cs):
+    cf, cfg, ct = patched_cs
+    assert os.listdir(cfg) == os.listdir(cf.cfg_dir)
+
+    print(f"TEST_PATCHED_CS: {cf.countries}")
+    print(f"TEST_PATCHED_CS: {cfg}")
+    print(f"TEST_PATCHED_CS: {cf.cfg_dir}")
+
+if __name__ == '__main__':
+    for i in range(5):
+        gf, ct = fixture_config_dirs()
+        for j in os.listdir(gf):
+            print(f"({i}) {j}")
+
+    # sanity checks
+#    print()
+#    print(f"{ascii(2,'l')=}")
+#    print(f"{ascii(2,'u')=}")
+#    print(f"{ascii(10,'p')=}")
+#    print()
+#    print(f"{create_config_filename(namelen=15, country='US')=}")
+#    print(f"{create_config_filename(country='US')=}")
+#    print(f"{create_config_filename(city='Abbudabi')=}")
+#    print(f"{create_config_filename(abv='adb')=}")
+#    print(f"{create_config_filename(server='a01')=}")
+#    print()
+#    print(f"{srvr_digits(1)=}")
+#    print(f"{srvr_digits(2)=}")
+#    print()
+#    print(f"{city_abv_pair()=}")
+#    print(f"{city_abv_pair(15)=}")
+#    print()
+#    print(f"{random_server_name()=}")
+#    print()
+#    print(f"{create_config_filename()=}")
+#    print(f"{create_config_filename(5)=}")
+#    print(f"{create_config_filename(15)=}")
+#    print(f"{create_config_filename(20)=}")
+#

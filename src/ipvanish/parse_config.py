@@ -13,8 +13,8 @@ class ConfigurationSet:
     """
     representation of all ipvanish config files
     """
-    def __init__(self, fpath=get_ovpn_config_dir()):
-        self.cfg_dir = Path(fpath)
+    def __init__(self, cfg_dir=get_ovpn_config_dir()):
+        self.cfg_dir = Path(cfg_dir)
         self.configs = []
         self.countries = []
         self.country_details = {}
