@@ -3,11 +3,13 @@ from pytest import MonkeyPatch
 import random
 import string
 from collections import defaultdict
+from data import some_52_countries
 
 import tempfile
 import os
 from pathlib import Path
 from ipvanish import ConfigurationSet
+
 
 def create_config_filename(namelen=10, **kw) -> string:
     """
@@ -18,9 +20,9 @@ def create_config_filename(namelen=10, **kw) -> string:
             print(f"WARN: ignoring keyword argument '{k}'")
             continue
     c,a = city_abv_pair(city_name_len=namelen)
-    return f"ipvanish-{kw.get('country', 'US')}-{kw.get('city',c)}-{kw.get('abv',a)}-{kw.get('server', random_server_name())}.ovpn"
+    return f"ipvanish-{kw.get('country', random.choice(some_52_countries))}-{kw.get('city',c)}-{kw.get('abv',a)}-{kw.get('server', random_server_name())}.ovpn"
 
-def ascii(num=1, case=None) -> str:
+def rand_ascii(num=1, case=None) -> str:
     """
     Generate random ascii characters of definite length, or in a pattern
     """
@@ -35,26 +37,22 @@ def ascii(num=1, case=None) -> str:
         _f = lambda: random.choice(string.ascii_letters)
     return ''.join([_f() for i in range(num)])
 
-def srvr_digits(num=2) -> str:
-    if num < 1:
-        raise ValueError("number of digits must be greater than 0")
-    return "%02d" % random.randint(0, 9*(10**(num-1)))
-
 def city_abv_pair(city_name_len=10) -> tuple:
-    name = ascii(city_name_len, 'proper')
+    name = rand_ascii(city_name_len, 'proper')
     abv = name[0:2].lower() + name[-1]
     return name,abv
 
 def random_server_name():
-    return ascii(1,'l') + srvr_digits(2)
+    #return rand_ascii(1,'l') + srvr_digits(2)
+    return rand_ascii(1,'l') + f"{random.randint(0, 99):02}"
 
-#@pytest.fixture
 def fixture_config_dirs(tmp_path='', range_lo=5, range_hi=10):
     """
     returns a tuple of the path to a temporary directory and the randomly
     generated number of empty .ovpn files inside.
     """
     tdir = Path(tempfile.TemporaryDirectory().name)
+    # tmp_path refers to pytest fixture. keeping JIC
     #tdir = tmp_path / "configs"
     tdir.mkdir()
     num_files = random.randint(range_lo,range_hi)
@@ -91,16 +89,19 @@ def test_patched_cs(patched_cs):
     print(f"TEST_PATCHED_CS: {cf.cfg_dir}")
 
 if __name__ == '__main__':
-    for i in range(5):
-        gf, ct = fixture_config_dirs()
-        for j in os.listdir(gf):
-            print(f"({i}) {j}")
-
+    for i in range(25):
+        print(random_server_name())
+    print(some_52_countries)
+#    for i in range(5):
+#        gf, ct = fixture_config_dirs()
+#        for j in os.listdir(gf):
+#            print(f"({i}) {j}")
+#
     # sanity checks
 #    print()
-#    print(f"{ascii(2,'l')=}")
-#    print(f"{ascii(2,'u')=}")
-#    print(f"{ascii(10,'p')=}")
+#    print(f"{rand_ascii(2,'l')=}")
+#    print(f"{rand_ascii(2,'u')=}")
+#    print(f"{rand_ascii(10,'p')=}")
 #    print()
 #    print(f"{create_config_filename(namelen=15, country='US')=}")
 #    print(f"{create_config_filename(country='US')=}")

@@ -6,7 +6,7 @@ from pathlib import Path
 import random
 
 from ipvanish import ConfigurationSet, Config, get_ovpn_config_dir
-#from fixtures.fixt_cfg_dir import fixture_config_dirs
+#from fixtures.fixt_cfg_dir import fake_cfg_dir
 from fixtures.fixt_cfg_dir import fake_cfg_dir
 
 # TODO there's gotta be a better way to do monkeypatching envs...
@@ -90,6 +90,8 @@ def test_CS_serverXabv_same_len_as_serverXcity(fake_cfg_dir):
         ipv_config = ConfigurationSet(cfg_dir)
         for sxa in ipv_config.serverXabv:
             for sxc in ipv_config.serverXcity:
+                
+                print(f"{len(ipv_config.serverXabv[sxa])=} == {len(ipv_config.serverXcity[sxc])=}")
                 assert len(ipv_config.serverXabv[sxa]) == len(ipv_config.serverXcity[sxc])
 
 def test_get_countries(fake_cfg_dir):
