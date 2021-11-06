@@ -18,7 +18,7 @@ class ConfigurationSet:
         self.cfg_dir = Path(cfg_dir)
         self.configs = []
         self.countries = []
-        self.country_details = {}
+        self.country_details = ctry_dict
         self.cityXcountry = defaultdict(set)
         self.abvXcountry = defaultdict(set)
         self.serverXcity = defaultdict(list)
@@ -37,6 +37,10 @@ class ConfigurationSet:
                 pass
         _unordered = []
         
+        # TODO set C.state depending on presence of file
+        # meaning list is populated from details dict.
+        # so would have to adjust details if there is a 
+        # config file for a country that DNE in the details.
         for C in self.configs:
             if C.country not in _unordered:
                 self.country_details[C.country] = ctry_dict[C.country]
@@ -50,6 +54,7 @@ class ConfigurationSet:
         for c in sorted(_unordered):
             self.countries.append(c)
 
+    # TODO test
     def get_abv(self, guess: str) -> str:
         """ return a city's abreviation from city name or city abv"""
         c = guess.lower()
@@ -83,6 +88,7 @@ class Config:
         self.fname = self.fpath.name
         self.__dict__.update(self.parse_ipv_fname(self.fname))
         self.md5 = ''
+        self.state = 'no'
 
     def __repr__(self):
         return f"{self.country}-{self.city_short}-{self.server}"
