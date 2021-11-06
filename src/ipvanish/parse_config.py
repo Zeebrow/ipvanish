@@ -15,39 +15,51 @@ from .exceptions import InvalidConfigurationWarning
 
 @dataclass
 class ConfigFile:
-    fname: str
-#    md5: str = field(init=False)
+    filepath: str
+    filename: str = field(init=False)
+    md5: str = field(init=False)
     country: str = field(init=False)
     city: str = field(init=False)
     abv: str = field(init=False)
     server: str = field(init=False)
 
     def __post_init__(self):
+        print(f"=========> {self.filepath}")
+        if not Path(self.filepath).exists():
+            # might could hold off on raising an exception, so that we know
+            # we attempted to load this file but could not.
+            # Hesitent about relying on return here, since I can't figure out 
+            # what errors this might cause.
+            # return None
+            raise FileNotFoundError(f"No such configuration file '{self.filepath}' to load. ")
+        self.filename = Path(self.filepath).name
         cfgrex = r'^(?:ipvanish-)(?P<country>[A-Z]{2})-(?P<city>.*)-(?P<city_short>[a-z]{3})-(?P<server>[a-z][0-9]{2})(?:\.ovpn)$'
         r = re.compile(cfgrex)
-        m = r.match(self.fname)
+        m = r.match(self.filename)
         if not m:
-            raise InvalidConfigurationWarning(f"Ignoring configuration file '{self.fname}': could not parse filename.")
+            raise InvalidConfigurationWarning(f"Ignoring configuration file '{self.filename}': could not parse filename.")
         else:
             self.country = m.groupdict()['country']
             self.city = m.groupdict()['city']
             self.abv = m.groupdict()['city_short']
             self.server = m.groupdict()['server']
-#            self.md5 = self.get_md5()
+            self.md5 = self.get_md5()
 
-#    def get_md5(self, filepath=None):
-#        if filepath:
-#            try:
-#                with open(Path(filepath).is_dir(), 'r') as f:
-#                    data = f.read()
-#                    self.md5 = hashlib.md5(data.encode()).hexdigest()
-#            except FileNotFoundError:
-#                pass
+    # matches linux md5sum
+    def get_md5(self, filepath=None):
+        if filepath:
+            try:
+                with open(Path(filepath).is_dir(), 'r') as f:
+                    data = f.read()
+                    self.md5 = hashlib.md5(data.encode()).hexdigest()
+            except FileNotFoundError:
+                pass
 
 class ConfigurationSet:
     """
     representation of all ipvanish config files
     """
+    # most params can be supplemented/replaced by db
     def __init__(self, cfg_dir=get_ovpn_config_dir()):
         self.cfg_dir = Path(cfg_dir)
         self.configs = []
@@ -145,6 +157,9 @@ class Config:
         with open(self.fname, 'r') as f:
             data = f.read()
             self.md5 = hashlib.md5(data.encode())
+
+    def get_db_object_thingy(self):
+        return ConfigFile(self.fpath.absolute())
 
 # fake for one cli func
 def get_countries_status(cfgdir=get_ovpn_config_dir()):
