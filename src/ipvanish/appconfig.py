@@ -25,21 +25,6 @@ def get_ovpn_config_dir(default_configs_dir=DEFAULT_CONFIGS_DIR):
 
     return ovpn_config_dir
 
-def _sanitize_path(p):
-    return str(Path(p))
-
-def list_configs(cfg_dir=get_ovpn_config_dir()) -> list:
-    """
-    return a list of all valid config files
-    cfg_dir: path to directory containing config files
-    """
-    cfg_dir = _sanitize_path(cfg_dir) 
-    configs = []
-    for x in os.listdir(cfg_dir):
-        if os.path.splitext(x)[1] == '.ovpn':
-            configs.append(x)
-    return configs
-
 class InvalidConfiguration(Exception):
     """Raise when no configuration files can be loaded"""
     pass

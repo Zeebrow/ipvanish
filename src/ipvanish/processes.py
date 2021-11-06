@@ -15,16 +15,17 @@ from .utils import get_ovpn_config_dir
 
 logger = logging.getLogger(__name__)
 
+# TODO use urllib3 instead of requests
 def update_configs(cfg_dir=get_ovpn_config_dir()):
     cfg_dir_bkup = Path(tempfile.mkdtemp(prefix='ipvanish-cfg-bkup'))
     shutil.copytree(src=cfg_dir, dst=cfg_dir_bkup / 'configs', copy_function=shutil.copy2)
     print(cfg_dir_bkup)
     try:
-        # TODO: host proxy for configs.zip
         url = "https://www.ipvanish.com/software/configs/configs.zip"
         r = get(url)
         z = zipfile.ZipFile(io.BytesIO(r.content))
         z.extractall(cfg_dir)
+        # TODO exception class
         raise Exception("test exception")
     except Exception as e:
         print(e)

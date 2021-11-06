@@ -3,7 +3,7 @@ import click
 from click import echo, style
 from collections import defaultdict
 
-from ipvanish import ConfigurationSet, get_city_servers, get_country_cities, get_countries_status, city_abv_pair, constants as C
+from ipvanish import ConfigurationSet, constants as C
 
 from .cli_helpers import column_print, column_print_plainjane, center, title_block
 
