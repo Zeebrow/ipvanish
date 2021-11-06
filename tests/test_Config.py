@@ -39,14 +39,14 @@ def test_CS_abv_list_eq_country_list():
         assert len(config.cityXcountry) == len(config.abvXcountry)
 
 def test_CS_loads_country_details():
-    cfg_dir = Path('./select_configfiles')
+    cfg_dir = Path('./select-configfiles')
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
         m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
         num_countries = 52 # number of details in constants.py ctry_details dict
         config = ConfigurationSet()
         #deboog
-        assert str(cfg_dir) == 'select_configfiles' 
+        assert str(cfg_dir) == 'select-configfiles' 
         #/deboog
         assert len(config.country_details.keys()) == num_countries
 
