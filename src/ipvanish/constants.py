@@ -1,7 +1,5 @@
 
 # looking up country full name by finding a city and googling it.
-# TODO visual inspection of flag emojis
-
 ctry_dict = {
     'AE': {'fullname': 'United Arab Emirates', 'flag_pic': '', 'flag_emote': '🇦🇪'},
     'AL': {'fullname': 'Albania', 'flag_pic': '', 'flag_emote': '🇦🇱'},
@@ -52,7 +50,7 @@ ctry_dict = {
     'SI': {'fullname': 'Slovenia', 'altNames': ['visit here'], 'flag_pic': '', 'flag_emote': '🇸🇮'},
     'SK': {'fullname': 'Slovakia', 'flag_pic': '', 'flag_emote': '🇸🇰'},
     'TW': {'fullname': 'Taiwan', 'flag_pic': '', 'flag_emote': '🇹🇼'},
-    'UK': {'fullname': 'United Kingdom', 'flag_pic': '', 'flag_emote': '🇺🇰'},
+    'UK': {'fullname': 'United Kingdom', 'flag_pic': '', 'flag_emote': '🇬🇧'},
     'US': {'fullname': 'United States', 'flag_pic': '', 'flag_emote': '🇺🇸'},
     'ZA': {'fullname': 'South Africa?', 'flag_pic': '', 'flag_emote': '🇿🇦'}
 }
