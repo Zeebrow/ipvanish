@@ -5,6 +5,10 @@ from fixt_cfg_dir import fixture_config_dirs
 
 import os
 
+# everything created by this fixture needs to be constant 
+# for only the scope in which it is used
+# e.g. two different test_abc functions will produce 2 different
+# sets of fixture configuration files
 @pytest.fixture
 def patched_cs(fixture_config_dirs):
     cfg_dir, ovpn_fcount = fixture_config_dirs

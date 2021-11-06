@@ -45,6 +45,7 @@ def test_CS_loads_country_details():
         m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
         num_countries = 52 # number of details in constants.py ctry_details dict
         config = ConfigurationSet()
+        assert str(cfg_dir) == '/home/builder/app/tests/select_configfiles' 
         assert len(config.country_details.keys()) == num_countries
 
 def test_CS_loads_(fake_cfg_dir):
@@ -101,7 +102,8 @@ def test_get_countries(fake_cfg_dir):
         m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
         ipv_config = ConfigurationSet(cfg_dir)
 
-
+def test_file_data_hash():
+    pass
 
 
 if __name__ == '__main__':

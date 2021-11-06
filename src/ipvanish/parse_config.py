@@ -5,6 +5,7 @@ import re
 import getpass
 import random
 from collections import defaultdict
+import hashlib 
 
 from .utils import *
 from .constants import ctry_dict
@@ -81,6 +82,7 @@ class Config:
             raise OSError(f"Unsupported file type '{self.fpath.suffix}'!")
         self.fname = self.fpath.name
         self.__dict__.update(self.parse_ipv_fname(self.fname))
+        self.md5 = ''
 
     def __repr__(self):
         return f"{self.country}-{self.city_short}-{self.server}"
@@ -98,6 +100,12 @@ class Config:
         cfgrex = r'^(?:ipvanish-)(?P<country>[A-Z]{2})-(?P<city>.*)-(?P<city_short>[a-z]{3})-(?P<server>[a-z][0-9]{2})(?:\.ovpn)$'
         r = re.compile(cfgrex).match(ipv_fname)
         return r.groupdict()
+
+    def get_md5(self):
+        with open(self.fname, 'r') as f:
+            data = f.read()
+            self.md5 = hashlib.md5(data.encode())
+
 
 def get_city_servers(city_short, cfgdir=get_ovpn_config_dir()):
     cfgs = os.listdir(Path(cfgdir))
