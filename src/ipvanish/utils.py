@@ -6,24 +6,34 @@ PROG_NAME = "ipvanish"
 DEFAULT_CONFIGS_DIR = str(Path(os.path.expanduser("~")) / f".config/{PROG_NAME}/configs")
 CA_CERTFILE = lambda cfgdir: str(Path(cfgdir)/"ca.ipvanish.com.crt")
 
-country_emote = lambda a: chr(127397 + ord(a.upper()))
-
-def get_ovpn_config_dir(default_configs_dir=DEFAULT_CONFIGS_DIR):
+def get_ovpn_config_dir(cfg_dir=None):
     """
-    default_configs_dir: str
+    returns the full path to a configs dir
+    cfg_dir: str
     env vars should (must?) be absolute paths
     """
+    if cfg_dir is not None:
+        try:
+            os.stat(cfg_dir)
+            return cfg_dir
+        except Exception as e:
+            print(e)
+            print(f"No such directory '{cfg_dir}'")
+            print("NOT falling back to environ, as config_dir was specified!!")
+            raise IndentationError
+
     if os.getenv("IPVANISH_CONFIG_DIR"):
         ovpn_config_dir = str( Path(os.getenv("IPVANISH_CONFIG_DIR")) )
     elif os.getenv("XDG_CONFIG_HOME"):
         ovpn_config_dir = str( Path(os.getenv("XDG_CONFIG_HOME")) / f"{PROG_NAME}/configs" )
     else:
         try:
-            ovpn_config_dir = str( Path( default_configs_dir ) ) 
+            ovpn_config_dir = str( Path( DEFAULT_CONFIGS_DIR ) ) 
             os.stat(ovpn_config_dir)
         except Exception as e:
             print(e)
             print(f"No such directory '{str(ovpn_config_dir)}'")
+            raise IndentationError
 
     return ovpn_config_dir
 

@@ -20,7 +20,7 @@ def main():
 
 
 @click.command()
-def get_ctry():
+def get_countries():
     config = ConfigurationSet()
     clist = []
     for c in config.countries:
@@ -93,7 +93,7 @@ main.add_command(yo, name='hi')
 main.add_command(yo, name='connect')
 main.add_command(yo, name='disconnect')
 main.add_command(get_servers, name='srv*')
-main.add_command(get_ctry, name='ctry')
+main.add_command(get_countries, name='countries')
 main.add_command(get_status, name='stat*')
 main.add_command(get_cities, name='list_cities')
 main.add_command(get_all_cities, name='all')

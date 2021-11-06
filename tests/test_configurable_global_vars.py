@@ -2,8 +2,10 @@ import pytest
 from pytest import MonkeyPatch
 from os.path import expanduser
 from pathlib import Path
-from ipvanish import get_ovpn_config_dir, list_configs, city_abv_pair
+from ipvanish import get_ovpn_config_dir, list_configs#, city_abv_pair
 import random
+import tempfile
+import os
 from fixtures.fixt_cfg_dir import fake_cfg_dir
 
 #cwd = Path(os.path.dirname(__file__))
@@ -37,15 +39,28 @@ def test_IPVANISH_CONFIG_DIR_overrides_XDG(fake_cfg_dir):
         assert get_ovpn_config_dir() != str(Path( default_xdg_config_home ) / "ipvanish/configs")
         assert get_ovpn_config_dir() == str(cfg_dir)
 
-def test_cli_arg_overrides_IPVANISH_CONFIG_DIR():
-    pass
-
-def test_city_abv_pair(fake_cfg_dir):
+def test_IPVANISH_CONFIG_DIR_overrides_XDG(fake_cfg_dir):
+    default_xdg_config_home =  str(Path( expanduser('~')) / ".config")
     cfg_dir, _ = fake_cfg_dir
+    tempdir = tempfile.mkdtemp()
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
         m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
-        print(city_abv_pair())
+        m.setenv("XDG_CONFIG_HOME", default_xdg_config_home)
+        cf = get_ovpn_config_dir(tempdir)
+        assert len(os.listdir(cf)) == 0
+        #assert get_ovpn_config_dir() != str(Path( default_xdg_config_home ) / "ipvanish/configs")
+        #assert get_ovpn_config_dir() == str(cfg_dir)
+
+def test_cli_arg_overrides_IPVANISH_CONFIG_DIR():
+    pass
+
+#def test_city_abv_pair(fake_cfg_dir):
+#    cfg_dir, _ = fake_cfg_dir
+#    monkeypatch = MonkeyPatch()
+#    with monkeypatch.context() as m:
+#        m.setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
+#        len(city_abv_pair())
 
 
         

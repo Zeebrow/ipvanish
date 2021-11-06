@@ -106,19 +106,7 @@ class Config:
             data = f.read()
             self.md5 = hashlib.md5(data.encode())
 
-
-def get_city_servers(city_short, cfgdir=get_ovpn_config_dir()):
-    cfgs = os.listdir(Path(cfgdir))
-    servers = []
-    for cfg in cfgs:
-        try:
-            c = Config(cfg)
-            if c.city_short == city_short:
-                servers.append(c.server)
-        except OSError:
-            pass
-    return servers
-    
+# fake for one cli func
 def get_countries_status(cfgdir=get_ovpn_config_dir()):
     cfgs = os.listdir(Path(cfgdir))
     countries = []
@@ -141,30 +129,33 @@ def get_countries_status(cfgdir=get_ovpn_config_dir()):
 #            pass
 #    return set(countries)
 
-def get_country_cities(country, cfgdir=get_ovpn_config_dir()):
-    cfgs = os.listdir(Path(cfgdir))
-    ccs = []
-    for c in cfgs:
-        try:
-            if country == Config(c).country:
-                ccs.append(Config(c).city_short)
-        except OSError:
-            pass
-    return set(ccs)
 
-# TODO test
-def city_abv_pair(cfgdir=get_ovpn_config_dir()):
-    cfgs = os.listdir(Path(cfgdir))
-    pairs = []
-    for c in cfgs:
-        try:
-            cf = Config(c)
-            city = cf.city 
-            abv = cf.city_short
-            pairs.append((city,abv))
-        except OSError:
-           pass 
-    return pairs
+# use ConfigurationSet
+#def get_country_cities(country, cfgdir=get_ovpn_config_dir()):
+#    cfgs = os.listdir(Path(cfgdir))
+#    ccs = []
+#    for c in cfgs:
+#        try:
+#            if country == Config(c).country:
+#                ccs.append(Config(c).city_short)
+#        except OSError:
+#            pass
+#    return set(ccs)
+
+# use ConfigurationSet
+## TODO test
+#def city_abv_pair(cfgdir=get_ovpn_config_dir()):
+#    cfgs = os.listdir(Path(cfgdir))
+#    pairs = []
+#    for c in cfgs:
+#        try:
+#            cf = Config(c)
+#            city = cf.city 
+#            abv = cf.city_short
+#            pairs.append((city,abv))
+#        except OSError:
+#           pass 
+#    return pairs
 
 
 if __name__ == "__main__":
