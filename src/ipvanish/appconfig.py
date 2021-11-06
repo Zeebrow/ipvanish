@@ -25,10 +25,6 @@ def get_ovpn_config_dir(default_configs_dir=DEFAULT_CONFIGS_DIR):
 
     return ovpn_config_dir
 
-class InvalidConfiguration(Exception):
-    """Raise when no configuration files can be loaded"""
-    pass
-
 def ovpn_config_dir_is_invalid(ovpn_config_dir):
     try:
         os.stat(ovpn_config_dir)
