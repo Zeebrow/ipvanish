@@ -6,7 +6,7 @@ PROG_NAME = "ipvanish"
 DEFAULT_CONFIGS_DIR = str(Path(os.path.expanduser("~")) / f".config/{PROG_NAME}/configs")
 CA_CERTFILE = lambda cfgdir: str(Path(cfgdir)/"ca.ipvanish.com.crt")
 
-def get_ovpn_config_dir(cfg_dir=None):
+def get_ovpn_config_dir(cfg_dir=None) -> str:
     """
     returns the full path to a configs dir
     cfg_dir: str
@@ -37,15 +37,11 @@ def get_ovpn_config_dir(cfg_dir=None):
 
     return ovpn_config_dir
 
-def _sanitize_path(p):
-    return str(Path(p))
-
 def list_configs(cfg_dir=get_ovpn_config_dir()) -> list:
     """
     return a list of all valid config files
     cfg_dir: path to directory containing config files
     """
-    cfg_dir = _sanitize_path(cfg_dir) 
     configs = []
     for x in os.listdir(cfg_dir):
         if os.path.splitext(x)[1] == '.ovpn':

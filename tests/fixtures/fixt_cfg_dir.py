@@ -67,12 +67,66 @@ def fixture_config_dirs(tmp_path='', range_lo=5, range_hi=10):
 
     return (tdir, num_files)
 
+# TODO? turn into wrapper function
+def fixture_filled_config_dir():
+    fake_file_content = """
+client
+dev tun 
+proto udp 
+remote atl-a05.ipvanish.com 443 
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+persist-remote-ip
+ca ca.ipvanish.com.crt
+verify-x509-name atl-a05.ipvanish.com name
+auth-user-pass
+comp-lzo
+verb 3
+auth SHA256
+cipher AES-256-CBC
+keysize 256 
+tls-cipher TLS-DHE-RSA-WITH-AES-256-CBC-SHA:TLS-DHE-DSS-WITH-AES-256-CBC-SHA:TLS-RSA-WITH-AES-256-CBC-SHA
+    """
+    tdir, num_valid_files = fixture_config_dirs()
+    for f in os.listdir(tdir):
+        if f.endswith('.ovpn'):
+            with open(f, 'wb') as cfgf:
+                cfgf.write(fake_file_content.encode())
+    return (tdir, num_valid_files)
+
 @pytest.fixture
 def fake_cfg_dir():
+    """
+    returns a length-2 tuple, (Path(tempdir), num_ovpn_files)
+    where tempdir contains a random number of files (between 6 and 13),
+    at least `num_ivpn_dirs` of which are valid ovpn config filenames.
+
+    All files in `tempdir` are empty.
+    """
     return fixture_config_dirs()
 
 @pytest.fixture
+def fake_filled_cfg_dir():
+    """
+    Similar to `fake_cfg_dir`, but files have dummy content.
+    File content is not guaranteed to be a valid openvpn configuration.
+    returns 2-tuple (Path(tempdir), num_ovpn_files)
+    """
+
+    return fixture_filled_config_dir() 
+
+@pytest.fixture
 def patched_cs():
+    """
+    Similar to fake_cfg_dir, but returns a 3-tuple,
+    where the first item is a `ConfigurationSet()` that has been 
+    monkeypatched.
+
+    TODO: Depreciate in favor of passing the directory name to 
+    the constructor, to override environment variables.
+    """
     cfg_dir, ovpn_count = fixture_config_dirs()
     print(os.listdir(cfg_dir))
     mp = MonkeyPatch()
