@@ -6,9 +6,43 @@ import getpass
 import random
 from collections import defaultdict
 import hashlib 
+from dataclasses import dataclass, field
 
 from .utils import *
 from .constants import ctry_dict
+from .exceptions import InvalidConfigurationWarning
+
+
+@dataclass
+class ConfigFile:
+    fname: str
+#    md5: str = field(init=False)
+    country: str = field(init=False)
+    city: str = field(init=False)
+    abv: str = field(init=False)
+    server: str = field(init=False)
+
+    def __post_init__(self):
+        cfgrex = r'^(?:ipvanish-)(?P<country>[A-Z]{2})-(?P<city>.*)-(?P<city_short>[a-z]{3})-(?P<server>[a-z][0-9]{2})(?:\.ovpn)$'
+        r = re.compile(cfgrex)
+        m = r.match(self.fname)
+        if not m:
+            raise InvalidConfigurationWarning(f"Ignoring configuration file '{self.fname}': could not parse filename.")
+        else:
+            self.country = m.groupdict()['country']
+            self.city = m.groupdict()['city']
+            self.abv = m.groupdict()['city_short']
+            self.server = m.groupdict()['server']
+#            self.md5 = self.get_md5()
+
+#    def get_md5(self, filepath=None):
+#        if filepath:
+#            try:
+#                with open(Path(filepath).is_dir(), 'r') as f:
+#                    data = f.read()
+#                    self.md5 = hashlib.md5(data.encode()).hexdigest()
+#            except FileNotFoundError:
+#                pass
 
 class ConfigurationSet:
     """

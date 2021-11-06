@@ -92,7 +92,7 @@ tls-cipher TLS-DHE-RSA-WITH-AES-256-CBC-SHA:TLS-DHE-DSS-WITH-AES-256-CBC-SHA:TLS
     tdir, num_valid_files = fixture_config_dirs()
     for f in os.listdir(tdir):
         if f.endswith('.ovpn'):
-            with open(f, 'wb') as cfgf:
+            with open(os.path.join(tdir, f), 'wb') as cfgf:
                 cfgf.write(fake_file_content.encode())
     return (tdir, num_valid_files)
 
