@@ -31,7 +31,7 @@ def test_CS_country_list_is_sorted(fake_cfg_dir):
             previous = specimen
 
 def test_CS_abv_list_eq_country_list():
-    cfg_dir = Path('./select_configfiles')
+    cfg_dir = Path('./select-configfiles')
     monkeypatch = MonkeyPatch()
     with monkeypatch.context() as m:
         m .setenv("IPVANISH_CONFIG_DIR", str(cfg_dir))
