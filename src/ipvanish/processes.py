@@ -52,7 +52,7 @@ def update_configs(cfg_dir=get_ovpn_config_dir()):
         archive_filename = f'configs-bkup-{nowzers}'
         shutil.make_archive(archive_filename, format='zip', root_dir=cfg_dir_bkup)
         print(f"backup config accessible at '{cfg_dir_bkup / archive_filename}'")
-        return False
+        return archive_filename
     
 def start(cfgfile, upfile=None):
     try:
