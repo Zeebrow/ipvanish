@@ -6,32 +6,49 @@ import shutil
 import zipfile
 import io
 import logging
+from time import time
 from pathlib import Path
+
 from requests import get
 
 from .utils import get_ovpn_config_dir
 
-#from ipvanish import get_ovpn_config_dir
 
 logger = logging.getLogger(__name__)
+
+import urllib3
+def _update_configs(cfg_dir=get_ovpn_config_dir(), file='configs.zip'):
+    cfg_dir_bkup = Path(tempfile.mkdtemp(prefix='ipvanish-cfg-bkup'))
+    shutil.copytree(src=cfg_dir, dst=cfg_dir_bkup / 'configs', copy_function=shutil.copy2)
+    try:
+        url = f"https://www.ipvanish.com/software/configs/{file}"
+        connection_pool = urllib3.PoolManager()
+        resp = connection_pool.request('GET', url)
+
+    except Exception as e:
+        print(e)
+        logger.critical(e)
+        nowzers=int(time())
+        archive_filename = f'configs-bkup-{nowzers}'
+        shutil.make_archive(archive_filename, format='zip', root_dir=cfg_dir_bkup)
+        print(f"backup config accessible at '{cfg_dir_bkup / archive_filename}'")
+        return False
 
 # TODO use urllib3 instead of requests
 def update_configs(cfg_dir=get_ovpn_config_dir()):
     cfg_dir_bkup = Path(tempfile.mkdtemp(prefix='ipvanish-cfg-bkup'))
     shutil.copytree(src=cfg_dir, dst=cfg_dir_bkup / 'configs', copy_function=shutil.copy2)
-    print(cfg_dir_bkup)
     try:
         url = "https://www.ipvanish.com/software/configs/configs.zip"
         r = get(url)
         z = zipfile.ZipFile(io.BytesIO(r.content))
         z.extractall(cfg_dir)
-        # TODO exception class
+        # TODO determine what is 
         raise Exception("test exception")
     except Exception as e:
         print(e)
         logger.critical(e)
-        #TODO: nowzers -> datetime
-        nowzers='ryenow'
+        nowzers=int(time())
         archive_filename = f'configs-bkup-{nowzers}'
         shutil.make_archive(archive_filename, format='zip', root_dir=cfg_dir_bkup)
         print(f"backup config accessible at '{cfg_dir_bkup / archive_filename}'")
