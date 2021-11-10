@@ -4,6 +4,8 @@ from click import echo, style
 from collections import defaultdict
 
 from ipvanish import ConfigurationSet, constants as C
+# debug
+from ipvanish import get_ovpn_config_dir
 
 from .cli_helpers import column_print, column_print_plainjane, center, title_block
 
@@ -86,10 +88,11 @@ def get_servers(city):
 
 @click.command()
 def yo():
-    click.secho("Hello world!", fg='blue')
+    cfg_dir = get_ovpn_config_dir()
+    print(f"{cfg_dir=}")
     
 
-main.add_command(yo, name='hi')
+main.add_command(yo, name='__debug')
 main.add_command(yo, name='connect')
 main.add_command(yo, name='disconnect')
 main.add_command(get_servers, name='srv*')

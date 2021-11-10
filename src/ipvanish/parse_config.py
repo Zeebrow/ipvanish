@@ -6,6 +6,7 @@ import getpass
 import random
 from collections import defaultdict
 import hashlib 
+from time import time
 from dataclasses import dataclass, field
 
 from .utils import *
@@ -78,11 +79,11 @@ class ConfigurationSet:
         files = os.listdir(self.cfg_dir)
         for f in files:
             try:
-                 self.configs.append(Config(f))
+                self.configs.append(Config(f))
             except OSError:
                 pass
         _unordered = []
-        
+
         # TODO set C.state depending on presence of file
         # meaning list is populated from details dict.
         # so would have to adjust details if there is a 
@@ -100,31 +101,64 @@ class ConfigurationSet:
         for c in sorted(_unordered):
             self.countries.append(c)
 
-    # TODO test
-    def get_abv(self, guess: str) -> str:
-        """ return a city's abreviation from city name or city abv"""
-        c = guess.lower()
-        c = c.replace(' ','-')
-        c = c.replace('_','-')
-        if t in self.city_abv.keys():
-            return self.city_abv[t]
-        if c in self.city_abv.values():
-            return self.abv_city[c]
+    def check_configs(self):
+        """ sniff test to ensure configuration directory is valid """
+        STALE_AFTER_SECONDS = 3600000000
 
-    def get_cities(self, country):
-        if country not in self.countries:
-            print("WARN: '{country}' is not a valid country.")
-            return None
-        return (self.cityXcountry[country])
-    
-    def city_abv_pair(self):
-        for C in self.configs:
-            city = C.city 
-            abv = C.city_short
-            self.city_lookup[abv] = city
-            self.abv_lookup[city] = abv
-        return pairs
-    
+        # my own testing framework :')
+        ok = lambda arg='': (bool(print(f"ok: {arg}")) | True) # or something interesting
+        no = lambda arg='': (bool(print(f"WARN: {arg}")) & False)# or something interesting
+        #check = lambda s: (print('ok') if s else print('Warn'))
+        check = lambda statement, cmt='', fok=ok, fno=no: (fok(cmt) if statement else fno(cmt))
+        # can we return a function, and decorate with a lambda?
+        
+        stat = os.stat(self.cfg_dir)
+
+        check(stat.st_uid == os.getuid(), "user owns configuration directory")
+        check(int(stat.st_ctime) + STALE_AFTER_SECONDS >= ( int(time()) ), "configuration directory is not stale")
+
+        file_ownership = True 
+        file_stale = True 
+        for c, f in enumerate(os.listdir(self.cfg_dir)):
+            st = os.stat(os.path.join(self.cfg_dir, f))
+            file_ownership & (st.st_uid == os.getuid())
+            file_stale & ( (int(stat.st_ctime) + STALE_AFTER_SECONDS) <= ( int(time()) ))
+        check(file_ownership, f"user owns all files ({c}) in configuration directory")
+        check(file_stale, f"configuration files ({c}) are fresh")
+        check(os.stat(os.path.abspath(__file__)).st_uid == os.getuid(), f"user owns this script")
+            
+
+
+
+
+    def get_filename_from_params(self, country='', city='', abv='', server=''):
+        pass
+
+    # TODO test
+#    def get_abv(self, guess: str) -> str:
+#        """ return a city's abreviation from city name or city abv"""
+#        c = guess.lower()
+#        c = c.replace(' ','-')
+#        c = c.replace('_','-')
+#        if t in self.city_abv.keys():
+#            return self.city_abv[t]
+#        if c in self.city_abv.values():
+#            return self.abv_city[c]
+#
+#    def get_cities(self, country):
+#        if country not in self.countries:
+#            print("WARN: '{country}' is not a valid country.")
+#            return None
+#        return (self.cityXcountry[country])
+#
+#    def city_abv_pair(self):
+#        for C in self.configs:
+#            city = C.city 
+#            abv = C.city_short
+#            self.city_lookup[abv] = city
+#            self.abv_lookup[city] = abv
+#        return pairs
+
 
 class Config:
     def __init__(self, fpath):
@@ -175,8 +209,10 @@ def get_countries_status(cfgdir=get_ovpn_config_dir()):
 
 
 if __name__ == "__main__":
-    cfgs = get_ovpn_config_dir()
-    print(cfgs)
-    print(len(os.listdir(cfgs)))
-    print(get_countries())
-    print(city_abv_pair())
+    cf = ConfigurationSet()
+    cf.check_configs()
+#    cfgs = get_ovpn_config_dir()
+#    print(cfgs)
+#    print(len(os.listdir(cfgs)))
+#    print(get_countries())
+#    print(city_abv_pair())
