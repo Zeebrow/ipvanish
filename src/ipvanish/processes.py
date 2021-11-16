@@ -98,6 +98,17 @@ def update_configs(cfg_dir=get_ovpn_config_dir(), file='configs.zip', bkup_dest=
         print(f"backup config accessible at '{cfg_dir_bkup / archive_filename}'")
         return False
 
+def import_config(file: str, cfg_dir=get_ovpn_config_dir()):
+    cfg_file = Path(cfg_dir / file)
+    if not cfg_file.exists():
+        print(f"ERROR: configuration file not found: '{file}'")
+        raise FileNotFoundError(f"ERROR: configuration file not found: '{file}'")
+
+    cfg_file = cfg_dir / file
+    cmd = ["nmcli", "con", "import", "type", "openvpn", "file", file]
+    # dummy
+    return True
+
 def start(cfgfile, upfile=None):
     try:
         os.path.exists(upfile)
@@ -135,6 +146,10 @@ def stop(self):
 
 
 if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--file", "-f", help="openvpn config file to activate")
     #restore_configs('.')
     update_configs(cfg_dir='./tmp/cfgtest')
 #    import sys
