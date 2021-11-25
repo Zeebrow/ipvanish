@@ -1,6 +1,8 @@
 vactivate
 PYTESTS_DIR="$(dirname $BASH_SOURCE)/tests"
 
+IPVANISH_CONFIG_DIR="$HOME/.config/ipvanish/configs"
+
 unset -f t
 function t () {
   if [ "$#" -eq 0 ]; then

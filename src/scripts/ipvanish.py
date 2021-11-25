@@ -91,6 +91,10 @@ def yo():
     cfg_dir = get_ovpn_config_dir()
     print(f"{cfg_dir=}")
     
+@click.command()
+def connect():
+    cfg_dir = get_ovpn_config_dir()
+    print(f"{cfg_dir=}")
 
 main.add_command(yo, name='__debug')
 main.add_command(yo, name='connect')

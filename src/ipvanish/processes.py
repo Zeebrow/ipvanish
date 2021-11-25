@@ -101,7 +101,6 @@ def update_configs(cfg_dir=get_ovpn_config_dir(), file='configs.zip', bkup_dest=
 def import_config(file: str, cfg_dir=get_ovpn_config_dir()):
     cfg_file = Path(cfg_dir / file)
     if not cfg_file.exists():
-        print(f"ERROR: configuration file not found: '{file}'")
         raise FileNotFoundError(f"ERROR: configuration file not found: '{file}'")
 
     cfg_file = cfg_dir / file
