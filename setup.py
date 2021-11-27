@@ -8,5 +8,9 @@ setup(
     install_requires=[
         'Click'
     ],
-    entry_points={'console_scripts':['ipvanish = scripts.ipvanish:main',],},
+    entry_points={'console_scripts':[
+            'ipvanish = scripts.ipvanish:main',
+            'nmclpy = scripts.nmclipy:main',
+        ],
+    },
 )

@@ -1,7 +1,8 @@
 vactivate
 PYTESTS_DIR="$(dirname $BASH_SOURCE)/tests"
 
-IPVANISH_CONFIG_DIR="$HOME/.config/ipvanish/configs"
+export IPVANISH_CONFIG_DIR="$HOME/.config/ipvanish/configs"
+source "$(dirname $BASH_SOURCE)/src/scripts/bash_completions/all.bash"
 
 unset -f t
 function t () {
